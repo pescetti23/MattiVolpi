@@ -1,0 +1,103 @@
+---
+// src/pages/journal.astro
+import Navbar from '../components/Navbar.astro';
+
+// Usiamo lo stesso metodo della Index per essere coerenti
+// Se i file sono in src/pages/blog/ usa './blog/*.md'
+// Se i file sono in src/content/blog/ usa '../content/blog/*.md'
+const allPosts = import.meta.glob('./blog/*.md', { eager: true });
+const posts = Object.values(allPosts).sort((a, b) => 
+    new Date(b.frontmatter.date).getTime() - new Date(a.frontmatter.date).getTime()
+);
+---
+
+<html lang="it">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>THE JOURNAL // MATTIA VOLPI #77</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Syncopate:wght@700&family=Inter:wght@300;400;900&display=swap" rel="stylesheet">
+    
+    <style>
+        :root { --blue: #00b4ff; --black: #050505; }
+        body { 
+            margin: 0; background: var(--black); color: white; 
+            font-family: 'Inter', sans-serif;
+            background-image: radial-gradient(circle at 50% 0%, rgba(0, 180, 255, 0.1) 0%, transparent 50%);
+        }
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
+
+        .journal-header { padding: 180px 0 60px; border-bottom: 1px solid rgba(255,255,255,0.05); }
+        .tag { font-family: 'Syncopate'; color: var(--blue); font-size: 0.6rem; letter-spacing: 4px; }
+        h1 { font-family: 'Syncopate'; font-size: clamp(2.5rem, 6vw, 4rem); margin: 15px 0; text-transform: uppercase; font-style: italic; }
+
+        .journal-grid { 
+            display: grid; 
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); 
+            gap: 30px; 
+            padding: 80px 0;
+        }
+
+        .card {
+            background: rgba(255,255,255,0.02);
+            border: 1px solid rgba(255,255,255,0.05);
+            transition: all 0.4s ease;
+            text-decoration: none;
+            color: inherit;
+            display: flex;
+            flex-direction: column;
+            padding: 40px;
+            position: relative;
+        }
+
+        .card:hover {
+            border-color: var(--blue);
+            background: rgba(0, 180, 255, 0.05);
+            transform: translateY(-5px);
+        }
+
+        .card::after { 
+            content: 'OPEN FILE'; position: absolute; top: 15px; right: 15px; 
+            font-family: 'Syncopate'; font-size: 0.5rem; color: var(--blue); 
+            opacity: 0.4; 
+        }
+
+        .meta { font-family: 'Syncopate'; font-size: 0.6rem; color: var(--blue); margin-bottom: 15px; display: block; }
+        h3 { font-family: 'Syncopate'; font-size: 1.1rem; margin: 0 0 15px; line-height: 1.4; text-transform: uppercase; font-style: italic; }
+        p { font-size: 0.9rem; opacity: 0.5; line-height: 1.6; font-weight: 300; }
+
+        @media (max-width: 768px) {
+            .journal-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <Navbar />
+
+    <header class="journal-header">
+        <div class="container">
+            <span class="tag">DATABASE ACCESS / JOURNAL</span>
+            <h1>ALL <span style="color:var(--blue)">REPORTS</span></h1>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="journal-grid">
+            {posts.map((post) => (
+                <a href={post.url} class="card">
+                    <span class="meta">{post.frontmatter.date}</span>
+                    <h3>{post.frontmatter.title}</h3>
+                    <p>{post.frontmatter.description}</p>
+                </a>
+            ))}
+        </div>
+    </main>
+
+    <footer style="padding: 100px 0 40px; text-align: center; opacity: 0.2; font-family: 'Syncopate'; font-size: 0.5rem;">
+        MATTIA VOLPI #77 // JOURNAL ARCHIVE SYSTEM
+    </footer>
+
+</body>
+</html>

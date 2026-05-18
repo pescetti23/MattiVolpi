@@ -1,17 +1,310 @@
 ---
+// src/pages/index.astro
+import Navbar from '../components/Navbar.astro';
 
+// 1. CARICAMENTO E FILTRO POST (Solo i 3 più recenti)
+const allPosts = import.meta.glob('./blog/*.md', { eager: true });
+const posts = Object.values(allPosts)
+    .sort((a, b) => {
+        const dateA = a.frontmatter?.date ? new Date(a.frontmatter.date).getTime() : 0;
+        const dateB = b.frontmatter?.date ? new Date(b.frontmatter.date).getTime() : 0;
+        return dateB - dateA;
+    })
+    .slice(0, 3);
 ---
 
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<link rel="icon" href="/favicon.ico" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro</title>
-	</head>
-	<body>
-		<h1>Astro</h1>
-	</body>
+<html lang="it">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>MATTIA VOLPI #77 | Official Website</title>
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Syncopate:wght@700&family=Inter:wght@300;400;900&display=swap" rel="stylesheet">
+    
+    <style>
+        :root { --blue: #00b4ff; --black: #050505; --dark-gray: #0d0d0d; }
+        
+        body { 
+            margin: 0; padding: 0; background: var(--black); color: white; 
+            font-family: 'Inter', sans-serif; overflow-x: hidden;
+            background-image: 
+                radial-gradient(circle at 50% 50%, rgba(0, 180, 255, 0.05) 0%, transparent 80%),
+                linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
+            background-size: 100% 100%, 50px 50px, 50px 50px;
+        }
+
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 20px; box-sizing: border-box; }
+
+        /* --- SPEED LINES EFFECT --- */
+        .speed-lines {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            pointer-events: none; z-index: 1; opacity: 0.3;
+        }
+        .line {
+            position: absolute; background: linear-gradient(90deg, transparent, var(--blue), transparent);
+            height: 1px; width: 100px; animation: sweep 2s linear infinite;
+        }
+        @keyframes sweep {
+            0% { transform: translateX(-200px); opacity: 0; }
+            50% { opacity: 1; }
+            100% { transform: translateX(120vw); opacity: 0; }
+        }
+
+        /* --- HERO --- */
+        .hero {
+            height: 100vh; display: flex; justify-content: center; align-items: center;
+            background: linear-gradient(to bottom, rgba(0,0,0,0.6), var(--black)), url('/sfondo.jpg') center/cover no-repeat;
+            text-align: center; overflow: hidden; position: relative;
+        }
+        .hero-content { position: relative; z-index: 2; transform: skewX(-5deg); }
+        .tagline { font-family: 'Syncopate'; color: var(--blue); font-size: 0.7rem; letter-spacing: 12px; margin-bottom: 20px; display: block; text-transform: uppercase; animation: pulse 2s infinite; }
+        h1 { font-size: clamp(3.5rem, 12vw, 9rem); font-weight: 900; font-style: italic; text-transform: uppercase; margin: 0; line-height: 0.85; letter-spacing: -4px; text-shadow: 10px 10px 0px rgba(0,180,255,0.1); }
+        
+        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
+
+        /* --- TELEMETRY --- */
+        .telemetry-bar {
+            background: #000; border-top: 1px solid #111; border-bottom: 1px solid #111;
+            padding: 80px 0; position: relative; z-index: 10;
+        }
+        .telemetry-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 30px; }
+        .stat-box { 
+            background: rgba(255,255,255,0.02); padding: 25px; 
+            border-left: 1px solid var(--blue); position: relative; 
+            transition: 0.3s; overflow: hidden;
+        }
+        .stat-box:hover { background: rgba(0,180,255,0.05); transform: scale(1.05) skewY(-1deg); }
+        .stat-header { font-size: 0.5rem; font-family: 'Syncopate'; letter-spacing: 2px; margin-bottom: 15px; display: flex; align-items: center; gap: 8px; opacity: 0.6; }
+        .dot { width: 6px; height: 6px; background: var(--blue); border-radius: 50%; animation: blink 1s infinite; }
+        @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
+        .counter { font-family: 'Syncopate'; font-size: 3rem; margin: 0; font-weight: 700; font-style: italic; }
+        .unit { color: var(--blue); font-size: 0.8rem; font-weight: 900; }
+        .stat-bar { width: 100%; height: 4px; background: rgba(255,255,255,0.05); margin: 15px 0; overflow: hidden; }
+        .bar-fill { height: 100%; background: linear-gradient(90deg, var(--blue), #fff); transform: translateX(-100%); transition: 2s cubic-bezier(0.23, 1, 0.32, 1); }
+
+        /* --- BIO SECTION --- */
+        .bio-section { padding: 120px 0; }
+        .bio-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center; }
+        .bio-image { 
+            position: relative; height: 500px; border: 1px solid #222; overflow: hidden;
+            transform: skewX(-3deg); transition: 0.5s;
+        }
+        .bio-image:hover { transform: skewX(0deg) scale(1.02); border-color: var(--blue); }
+        .bio-content h2 { font-family: 'Syncopate'; font-size: 2.5rem; line-height: 1; margin-bottom: 30px; font-style: italic; transform: skewX(-5deg); }
+        .btn-racing {
+            display: inline-block; padding: 18px 40px; border: 1px solid var(--blue); 
+            color: white; font-family: 'Syncopate'; font-size: 0.7rem; text-decoration: none; 
+            letter-spacing: 2px; transition: 0.4s; position: relative; z-index: 1;
+        }
+        .btn-racing::before { content: ''; position: absolute; top: 0; left: 0; width: 0; height: 100%; background: var(--blue); z-index: -1; transition: 0.4s; }
+        .btn-racing:hover::before { width: 100%; }
+        .btn-racing:hover { color: black; font-weight: 900; }
+
+        /* --- TECH SECTION --- */
+        .tech-section { padding: 100px 0; background: #080808; position: relative; }
+        .specs-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; }
+        .spec-item { 
+            padding: 30px; background: rgba(255,255,255,0.01); border: 1px solid rgba(255,255,255,0.05); 
+            clip-path: polygon(0 0, 100% 0, 95% 100%, 0% 100%); transition: 0.3s;
+        }
+        .spec-item:hover { border-color: var(--blue); background: rgba(0,180,255,0.05); transform: translateX(10px); }
+
+        /* --- JOURNAL --- */
+        .journal-section { padding: 100px 0; }
+        .journal-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; }
+        .card { 
+            background: #0d0d0d; padding: 40px; border: 1px solid #1a1a1a; transition: 0.4s; 
+            text-decoration: none; color: white; display: block; position: relative;
+        }
+        .card::after { content: 'READ DATA'; position: absolute; top: 10px; right: 10px; font-family: 'Syncopate'; font-size: 0.5rem; color: var(--blue); opacity: 0; transition: 0.3s; }
+        .card:hover::after { opacity: 1; transform: translateX(-10px); }
+
+        .view-all-wrapper { text-align: center; margin-top: 60px; }
+        .btn-journal-all {
+            display: inline-flex; align-items: center; gap: 15px;
+            padding: 15px 35px; border: 1px solid rgba(255,255,255,0.1);
+            color: var(--blue); font-family: 'Syncopate'; font-size: 0.65rem;
+            text-decoration: none; letter-spacing: 3px; transition: 0.3s;
+        }
+        .btn-journal-all:hover {
+            background: var(--blue); color: black; border-color: var(--blue);
+            box-shadow: 0 0 20px rgba(0, 180, 255, 0.3);
+        }
+
+        /* --- FOOTER --- */
+        .main-footer { 
+            background: #000; 
+            padding: 80px 0 40px; 
+            border-top: 1px solid #111; 
+            margin-top: 100px;
+            position: relative;
+            z-index: 10;
+        }
+        .footer-flex { 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            flex-wrap: wrap; 
+            gap: 30px; 
+            margin-bottom: 40px; 
+        }
+        .footer-logo { font-family: 'Syncopate'; font-weight: 700; font-style: italic; color: white; text-decoration: none; font-size: 1.5rem; }
+        .social-icons { display: flex; gap: 25px; }
+        .social-icons a { color: white; font-size: 1.5rem; opacity: 0.6; transition: 0.3s; }
+        .social-icons a:hover { color: var(--blue); opacity: 1; transform: translateY(-5px); }
+        .footer-bottom { text-align: center; border-top: 1px solid #111; padding-top: 40px; font-family: 'Syncopate'; font-size: 0.5rem; letter-spacing: 4px; opacity: 0.3; }
+
+        @media (max-width: 900px) {
+            .bio-grid { grid-template-columns: 1fr; }
+            h1 { font-size: 4rem; }
+            .footer-flex { flex-direction: column; text-align: center; }
+        }
+    </style>
+</head>
+<body>
+    
+    <div class="speed-lines">
+        <div class="line" style="top: 20%; animation-delay: 0s;"></div>
+        <div class="line" style="top: 50%; animation-delay: 0.5s;"></div>
+        <div class="line" style="top: 80%; animation-delay: 1.2s;"></div>
+        <div class="line" style="top: 35%; animation-delay: 0.8s;"></div>
+    </div>
+
+    <Navbar />
+
+    <section class="hero">
+        <div class="hero-content">
+            <span class="tagline">DATA DRIVEN RIDER</span>
+            <h1>MATTIA<br><span style="color:var(--blue)">VOLPI</span></h1>
+        </div>
+    </section>
+
+    <section class="telemetry-bar">
+        <div class="container">
+            <div class="telemetry-grid">
+                <div class="stat-box">
+                    <div class="stat-header"><span class="dot"></span> LIVE SPEED</div>
+                    <div class="number-wrapper"><h3 class="counter" data-target="294">0</h3><span class="unit">KM/H</span></div>
+                    <div class="stat-bar"><div class="bar-fill"></div></div>
+                    <span class="stat-label" style="font-size: 0.6rem; opacity: 0.4;">Peak Velocity</span>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-header"><span class="dot"></span> LEAN ANGLE</div>
+                    <div class="number-wrapper"><h3 class="counter" data-target="61">0</h3><span class="unit">°</span></div>
+                    <div class="stat-bar"><div class="bar-fill"></div></div>
+                    <span class="stat-label" style="font-size: 0.6rem; opacity: 0.4;">Max Lean Angle</span>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-header"><span class="dot" style="background:#ff3e3e"></span> BIOMETRIC</div>
+                    <div class="number-wrapper"><h3 class="counter" data-target="185">0</h3><span class="unit">BPM</span></div>
+                    <div class="stat-bar"><div class="bar-fill"></div></div>
+                    <span class="stat-label" style="font-size: 0.6rem; opacity: 0.4;">Heart Rate</span>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-header"><span class="dot"></span> POSITION</div>
+                    <div class="number-wrapper"><h3 class="counter" data-target="77">0</h3></div>
+                    <div class="stat-bar"><div class="bar-fill"></div></div>
+                    <span class="stat-label" style="font-size: 0.6rem; opacity: 0.4;">Racing ID</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="bio-section container">
+        <div class="bio-grid">
+            <div class="bio-image">
+                <img src="/mattia-bio.jpg" alt="Mattia Volpi #77" style="width: 100%; height: 100%; object-fit: cover; filter: contrast(1.1);">
+            </div>
+            <div class="bio-content">
+                <span style="color: var(--blue); font-weight: 900; letter-spacing: 5px; font-size: 0.7rem;">THE PROFILE</span>
+                <h2>MATTIA VOLPI:<br>CHASING LIMITS</h2>
+                <p>Nato per la velocità. Mattia Volpi #77 fonde istinto e precisione tecnica in ogni curva. Dalla telemetria alla pista, la ricerca della perfezione non si ferma mai.</p>
+                <a href="/carriera" class="btn-racing">FULL HISTORY</a>
+            </div>
+        </div>
+    </section>
+
+    <section class="tech-section">
+        <div class="container">
+            <h2 class="section-title" style="font-family: 'Syncopate'; font-style: italic;">TECHNICAL<br><span style="color:var(--blue)">CONFIGURATION</span></h2>
+            <div class="specs-grid">
+                <div class="spec-item"><span class="spec-label" style="display:block; font-size:0.6rem; color:var(--blue); font-family:'Syncopate'; margin-bottom:10px;">Power Unit</span><span class="spec-value" style="font-size:1.2rem; font-weight:700;">Supersport 600 Evo</span></div>
+                <div class="spec-item"><span class="spec-label" style="display:block; font-size:0.6rem; color:var(--blue); font-family:'Syncopate'; margin-bottom:10px;">Electronics</span><span class="spec-value" style="font-size:1.2rem; font-weight:700;">2D Full Telemetry</span></div>
+                <div class="spec-item"><span class="spec-label" style="display:block; font-size:0.6rem; color:var(--blue); font-family:'Syncopate'; margin-bottom:10px;">Suspension</span><span class="spec-value" style="font-size:1.2rem; font-weight:700;">Ohlins TTX Racing</span></div>
+                <div class="spec-item"><span class="spec-label" style="display:block; font-size:0.6rem; color:var(--blue); font-family:'Syncopate'; margin-bottom:10px;">Brakes</span><span class="spec-value" style="font-size:1.2rem; font-weight:700;">Brembo Monobloc</span></div>
+            </div>
+        </div>
+    </section>
+
+    <section class="journal-section container" id="journal">
+        <h2 class="section-title" style="font-family: 'Syncopate'; font-style: italic;">LATEST<br><span style="color:var(--blue)">REPORTS</span></h2>
+        <div class="journal-grid">
+            {posts.map(post => (
+                <a href={post.url} class="card">
+                    <span style="color:var(--blue); font-size:0.6rem; font-family:'Syncopate';">{post.frontmatter.date}</span>
+                    <h3 style="font-style: italic; text-transform: uppercase; margin: 15px 0;">{post.frontmatter.title}</h3>
+                    <p style="opacity:0.5; font-size:0.9rem;">{post.frontmatter.description}</p>
+                </a>
+            ))}
+        </div>
+
+        <div class="view-all-wrapper">
+            <a href="/journal" class="btn-journal-all">
+                ACCESS FULL ARCHIVE <i class="fas fa-chevron-right"></i>
+            </a>
+        </div>
+    </section>
+
+    <footer class="main-footer">
+        <div class="container">
+            <div class="footer-flex">
+                <a href="/" class="footer-logo">VOLPI<span style="color:var(--blue)">77</span></a>
+                <div class="social-icons">
+                    <a href="https://www.instagram.com" target="_blank"><i class="fab fa-instagram"></i></a>
+                    <a href="https://www.tiktok.com" target="_blank"><i class="fab fa-tiktok"></i></a>
+                    <a href="https://www.youtube.com" target="_blank"><i class="fab fa-youtube"></i></a>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>© 2026 MATTIA VOLPI #77 // ALL RIGHTS RESERVED</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        const counters = document.querySelectorAll('.counter');
+        const bars = document.querySelectorAll('.bar-fill');
+        
+        const animate = () => {
+            counters.forEach((counter, i) => {
+                const target = +counter.getAttribute('data-target');
+                let now = 0;
+                const update = () => {
+                    if (now < target) {
+                        now += target / 60;
+                        counter.innerText = Math.ceil(now);
+                        setTimeout(update, 20);
+                    } else { counter.innerText = target; }
+                };
+                update();
+                if(bars[i]) bars[i].style.transform = 'translateX(0)';
+            });
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(e => { if(e.isIntersecting) { animate(); observer.unobserve(e.target); }});
+        }, { threshold: 0.5 });
+
+        const targetSection = document.querySelector('.telemetry-bar');
+        if(targetSection) observer.observe(targetSection);
+
+        window.addEventListener('scroll', () => {
+            const scroll = window.pageYOffset;
+            const hero = document.querySelector('.hero');
+            if (hero) hero.style.backgroundSize = `${100 + scroll / 10}%`;
+        });
+    </script>
+</body>
 </html>

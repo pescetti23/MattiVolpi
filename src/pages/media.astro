@@ -1,0 +1,153 @@
+---
+// src/pages/media.astro
+import Navbar from '../components/Navbar.astro';
+
+// Array dei video (puoi aggiungere o cambiare i link qui)
+const videos = [
+    {
+        title: "Highlights Gara 1 - Misano World Circuit",
+        description: "Una sintesi della prima gara stagionale tra sorpassi e gestione gomme.",
+        youtubeId: "dQw4w9WgXcQ", // Sostituisci con l'ID reale del video
+        tag: "RACE FILM"
+    },
+    {
+        title: "Intervista Post-Gara: Il feeling con la moto",
+        description: "Analisi tecnica della ciclistica e del set-up elettronico per il campionato.",
+        youtubeId: "dQw4w9WgXcQ",
+        tag: "INTERVIEW"
+    },
+    {
+        title: "On Board Lap - Autodromo del Mugello",
+        description: "Un giro completo a 300km/h vissuto direttamente dal casco di Mattia.",
+        youtubeId: "dQw4w9WgXcQ",
+        tag: "ON BOARD"
+    },
+    {
+        title: "Servizio Speciale: Il talento della Superbike",
+        description: "Approfondimento giornalistico sulla preparazione atletica e mentale.",
+        youtubeId: "dQw4w9WgXcQ",
+        tag: "PRESS"
+    }
+];
+---
+
+<html lang="it">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>MEDIA HUB // MATTIA VOLPI #77</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Syncopate:wght@700&family=Inter:wght@300;400;900&display=swap" rel="stylesheet">
+    
+    <style>
+        :root { --blue: #00b4ff; --black: #050505; }
+        body { 
+            margin: 0; background: var(--black); color: white; 
+            font-family: 'Inter', sans-serif;
+            background-image: radial-gradient(circle at 50% 0%, rgba(0, 180, 255, 0.05) 0%, transparent 50%);
+        }
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
+
+        .header { padding: 180px 0 60px; text-align: left; border-bottom: 1px solid rgba(255,255,255,0.05); }
+        .tag-top { font-family: 'Syncopate'; color: var(--blue); font-size: 0.6rem; letter-spacing: 5px; }
+        h1 { font-family: 'Syncopate'; font-size: clamp(2.5rem, 8vw, 4.5rem); font-style: italic; margin: 15px 0; text-transform: uppercase; }
+
+        .media-grid { 
+            display: grid; 
+            grid-template-columns: repeat(auto-fit, minmax(450px, 1fr)); 
+            gap: 40px; 
+            padding: 80px 0;
+        }
+
+        .video-card {
+            background: rgba(255,255,255,0.02);
+            border: 1px solid rgba(255,255,255,0.05);
+            transition: 0.4s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .video-card:hover {
+            border-color: var(--blue);
+            transform: translateY(-5px);
+            background: rgba(0, 180, 255, 0.03);
+        }
+
+        /* --- WRAPPER PER VIDEO YOUTUBE --- */
+        .video-wrapper {
+            position: relative;
+            padding-bottom: 56.25%; /* 16:9 */
+            height: 0;
+            overflow: hidden;
+            background: #000;
+        }
+
+        .video-wrapper iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+            filter: grayscale(0.2);
+            transition: 0.5s;
+        }
+
+        .video-card:hover iframe {
+            filter: grayscale(0);
+        }
+
+        .video-info { padding: 30px; }
+        .video-tag { 
+            font-family: 'Syncopate'; font-size: 0.5rem; color: var(--blue); 
+            letter-spacing: 2px; border: 1px solid var(--blue); 
+            padding: 4px 8px; display: inline-block; margin-bottom: 15px;
+        }
+        .video-info h3 { 
+            font-family: 'Syncopate'; font-size: 1.1rem; margin: 0 0 10px; 
+            font-style: italic; text-transform: uppercase;
+        }
+        .video-info p { opacity: 0.5; font-size: 0.9rem; font-weight: 300; line-height: 1.5; }
+
+        @media (max-width: 768px) {
+            .media-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <Navbar />
+
+    <div class="container">
+        <header class="header">
+            <span class="tag-top">Visual Database</span>
+            <h1>BROADCAST <span style="color:var(--blue)">CENTER</span></h1>
+        </header>
+
+        <main class="media-grid">
+            {videos.map(video => (
+                <div class="video-card">
+                    <div class="video-wrapper">
+                        <iframe 
+                            src={`https://www.youtube.com/embed/${video.youtubeId}`} 
+                            title={video.title}
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                            allowfullscreen>
+                        </iframe>
+                    </div>
+                    <div class="video-info">
+                        <span class="video-tag">{video.tag}</span>
+                        <h3>{video.title}</h3>
+                        <p>{video.description}</p>
+                    </div>
+                </div>
+            ))}
+        </main>
+    </div>
+
+    <footer style="padding: 100px 0 40px; text-align: center; opacity: 0.2; font-family: 'Syncopate'; font-size: 0.5rem; letter-spacing: 3px;">
+        MATTIA VOLPI #77 // MULTIMEDIA ARCHIVE
+    </footer>
+
+</body>
+</html>

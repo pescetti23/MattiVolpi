@@ -1,0 +1,117 @@
+---
+// src/components/Footer.astro
+---
+<footer class="racing-footer">
+    <div class="footer-container">
+        <div class="footer-main">
+            <div class="footer-brand">
+                <a href="/" class="footer-logo">VOLPI<span class="blue-text">77</span></a>
+                <p>Pushing the limits of speed and technology.</p>
+            </div>
+            
+            <div class="social-links">
+                <a href="https://www.instagram.com/" target="_blank" aria-label="Instagram">
+                    <i class="fab fa-instagram"></i>
+                </a>
+                <a href="https://www.tiktok.com/" target="_blank" aria-label="TikTok">
+                    <i class="fab fa-tiktok"></i>
+                </a>
+                <a href="https://www.youtube.com/" target="_blank" aria-label="YouTube">
+                    <i class="fab fa-youtube"></i>
+                </a>
+            </div>
+        </div>
+        
+        <div class="footer-bottom">
+            <p>© 2026 MATTIA VOLPI #77 // ALL RIGHTS RESERVED</p>
+        </div>
+    </div>
+</footer>
+PORCODDIO FUNZIONI?????????????
+<style>
+    .racing-footer {
+        background: #000;
+        padding: 60px 0 30px 0;
+        border-top: 1px solid rgba(255,255,255,0.05);
+        margin-top: 80px;
+        width: 100%;
+        color: white;
+    }
+
+    /* Usiamo un nome specifico per evitare conflitti */
+    .footer-container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 30px;
+        box-sizing: border-box;
+    }
+
+    .footer-main {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding-bottom: 40px;
+    }
+
+    .footer-logo {
+        font-family: 'Syncopate', sans-serif;
+        font-weight: 700;
+        color: white;
+        text-decoration: none;
+        font-size: 1.4rem;
+        letter-spacing: -1px;
+    }
+
+    .blue-text { color: #00b4ff; }
+
+    .footer-brand p {
+        opacity: 0.4;
+        font-size: 0.75rem;
+        margin: 8px 0 0 0;
+        letter-spacing: 1px;
+    }
+
+    .social-links {
+        display: flex;
+        gap: 20px;
+    }
+
+    .social-links a {
+        color: white;
+        font-size: 1.4rem;
+        transition: 0.3s ease;
+        opacity: 0.5;
+    }
+
+    .social-links a:hover {
+        color: #00b4ff;
+        opacity: 1;
+        transform: translateY(-3px);
+    }
+
+    .footer-bottom {
+        border-top: 1px solid rgba(255,255,255,0.05);
+        padding-top: 30px;
+        text-align: center;
+    }
+
+    .footer-bottom p {
+        font-family: 'Syncopate', sans-serif;
+        font-size: 0.5rem;
+        letter-spacing: 3px;
+        opacity: 0.2;
+        margin: 0;
+    }
+
+    /* Mobile: tutto in colonna e centrato */
+    @media (max-width: 768px) {
+        .footer-main {
+            flex-direction: column;
+            gap: 30px;
+            text-align: center;
+        }
+        .social-links {
+            justify-content: center;
+        }
+    }
+</style>

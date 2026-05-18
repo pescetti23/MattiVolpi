@@ -1,0 +1,197 @@
+---
+import Navbar from '../components/Navbar.astro';
+---
+
+<html lang="it">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CAREER LOG // MATTIA VOLPI #77</title>
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Syncopate:wght@700&family=Inter:wght@300;400;900&display=swap" rel="stylesheet">
+    
+    <style>
+        :root { --blue: #00b4ff; --black: #050505; --dark-gray: #0d0d0d; }
+        
+        body { 
+            margin: 0; padding: 0; background: var(--black); color: white; 
+            font-family: 'Inter', sans-serif; overflow-x: hidden;
+            background-image: 
+                radial-gradient(circle at 50% 0%, rgba(0, 180, 255, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 100% 100%, rgba(0, 180, 255, 0.05) 0%, transparent 40%),
+                linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
+            background-size: 100% 200%, 100% 200%, 60px 60px, 60px 60px;
+            background-attachment: fixed;
+        }
+
+        .container { max-width: 1100px; margin: 0 auto; padding: 0 20px; }
+
+        .page-header { padding: 200px 0 100px; text-align: left; border-bottom: 1px solid rgba(0, 180, 255, 0.1); }
+        .serial-number { font-family: 'Syncopate'; color: var(--blue); font-size: 0.7rem; letter-spacing: 5px; }
+        h1 { font-family: 'Syncopate'; font-size: clamp(3rem, 10vw, 6rem); font-style: italic; margin: 15px 0; text-transform: uppercase; line-height: 0.85; letter-spacing: -2px; }
+
+        /* --- TIMELINE REVISITED --- */
+        .timeline { position: relative; padding: 120px 0; }
+        .timeline::before {
+            content: ''; position: absolute; left: 50%; width: 1px; height: 100%;
+            background: linear-gradient(to bottom, transparent, var(--blue), var(--blue), transparent);
+            opacity: 0.2;
+        }
+
+        .event { margin-bottom: 180px; display: flex; justify-content: space-between; align-items: center; width: 100%; position: relative; }
+        .event:nth-child(even) { flex-direction: row-reverse; }
+
+        /* --- NUMERI PIÙ COLORATI --- */
+        .event-date {
+            width: 45%; font-family: 'Syncopate'; font-size: clamp(3rem, 10vw, 7rem); 
+            font-style: italic; 
+            color: transparent;
+            -webkit-text-stroke: 1px rgba(0, 180, 255, 0.2);
+            transition: 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+            position: relative;
+        }
+
+        .event:hover .event-date { 
+            color: rgba(0, 180, 255, 0.1);
+            -webkit-text-stroke: 1px var(--blue);
+            text-shadow: 0 0 30px rgba(0, 180, 255, 0.3);
+            transform: scale(1.05) skewX(-5deg);
+        }
+
+        .event-content {
+            width: 45%; padding: 50px; background: rgba(13, 13, 13, 0.7); 
+            border: 1px solid rgba(0, 180, 255, 0.1); position: relative; backdrop-filter: blur(15px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+        }
+
+        /* Piccola decorazione nell'angolo delle card */
+        .event-content::after {
+            content: ''; position: absolute; top: 0; right: 0; width: 30px; height: 30px;
+            border-top: 2px solid var(--blue); border-right: 2px solid var(--blue);
+            opacity: 0.3;
+        }
+
+        .event-content h3 { font-family: 'Syncopate'; color: var(--blue); font-size: 1.2rem; margin: 0 0 20px; text-transform: uppercase; }
+        .event-content p { opacity: 0.7; line-height: 1.8; font-size: 0.95rem; font-weight: 300; }
+
+        .status-tag { 
+            display: inline-block; padding: 5px 12px; background: rgba(0, 180, 255, 0.1); 
+            color: var(--blue); border: 1px solid var(--blue); 
+            font-family: 'Syncopate'; font-size: 0.55rem; margin-bottom: 20px; 
+        }
+
+        /* --- VISION & CONTACT --- */
+        .vision-closure { text-align: center; padding: 100px 0 50px; }
+        .vision-line { width: 80px; height: 2px; background: var(--blue); margin: 0 auto 40px; box-shadow: 0 0 20px var(--blue); }
+        .vision-text { font-family: 'Syncopate'; font-weight: 900; font-size: clamp(1.2rem, 3vw, 2.5rem); line-height: 1.4; color: #fff; text-transform: uppercase; }
+        .glow-text { color: var(--blue); text-shadow: 0 0 20px rgba(0, 180, 255, 0.5); }
+
+        .contact-grid { 
+            display: flex; justify-content: space-between; align-items: center; 
+            background: rgba(0, 180, 255, 0.02); padding: 35px 45px; border: 1px solid rgba(0, 180, 255, 0.1); transition: 0.4s;
+        }
+        .contact-grid:hover { border-color: var(--blue); background: rgba(0, 180, 255, 0.08); box-shadow: 0 0 30px rgba(0, 180, 255, 0.1); }
+
+        @media (max-width: 768px) {
+            .timeline::before { left: 20px; }
+            .event, .event:nth-child(even) { flex-direction: column; align-items: flex-start; margin-bottom: 80px; }
+            .event-date { width: 100%; font-size: 3.5rem; margin-left: 40px; color: var(--blue); opacity: 0.3; }
+            .event-content { width: calc(100% - 40px); margin-left: 40px; padding: 30px; }
+        }
+    </style>
+</head>
+<body>
+
+    <Navbar />
+
+    <header class="page-header container">
+        <div class="reveal">
+            <span class="serial-number">LOG FILE: PILOT EVOLUTION v2.6</span>
+            <h1>FULL CAREER<br><span style="color:var(--blue)">SUMMARY</span></h1>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="timeline">
+            
+            <div class="event reveal">
+                <div class="event-date">2014 - 2016</div>
+                <div class="event-content">
+                    <span class="status-tag">SYSTEM START</span>
+                    <h3>PRIMI PASSI E MINI GP</h3>
+                    <p>Inizio gare a 8 anni. Impressiona subito piloti del calibro di Pasini e Bulega per le staccate profonde e le linee particolari. Ottiene vittorie e podi in Pre-MiniGP con permesso speciale FMI.</p>
+                </div>
+            </div>
+
+            <div class="event reveal">
+                <div class="event-date">2018 - 2020</div>
+                <div class="event-content">
+                    <span class="status-tag">INT UPGRADE</span>
+                    <h3>SPAGNA E SIC58</h3>
+                    <p>Avventura internazionale nel Moto4 spagnolo e ingresso nel CEV con il team di Simoncelli (SIC58). Mattia compete con i futuri talenti del mondiale dimostrando lo stesso ritmo dei migliori.</p>
+                </div>
+            </div>
+
+            <div class="event reveal">
+                <div class="event-date">2021 - 2024</div>
+                <div class="event-content">
+                    <span class="status-tag">EURO MOTO2</span>
+                    <h3>EUROPEO MOTO2</h3>
+                    <p>Passaggio alla Moto2 con i team AGR e Ciatti. Nonostante alcuni infortuni, ad Aragon sfiora il podio in una volata a tre, confermando una velocità da top rider di categoria.</p>
+                </div>
+            </div>
+
+            <div class="event reveal">
+                <div class="event-date">2025</div>
+                <div class="event-content">
+                    <span class="status-tag">SBK DEBUT</span>
+                    <h3>NATIONAL CUP & SBK</h3>
+                    <p>Vince nel National Cup 1000 con una moto pressoché di serie. Debutta nel CIV SBK con il team Pistard come compagno del campione Del Bianco, tenendo testa ai migliori fin dal primo test.</p>
+                </div>
+            </div>
+
+            <div class="event reveal">
+                <div class="event-date">2026</div>
+                <div class="event-content" style="border-color: var(--blue); background: rgba(0, 180, 255, 0.08);">
+                    <span class="status-tag" style="background: var(--blue); color: black;">ACTIVE MISSION</span>
+                    <h3>PISTARD BMW ITALIA</h3>
+                    <p>Accordo ufficiale con il team di riferimento BMW Italia per il campionato CIV. Un progetto ambizioso basato su dati, tecnologia e l'obiettivo della vittoria finale.</p>
+                </div>
+            </div>
+        </div>
+
+        <section class="vision-closure reveal">
+            <div class="vision-line"></div>
+            <h2 class="vision-text">
+                I DATI RACCONTANO IL PASSATO.<br>
+                <span class="glow-text">IL CORAGGIO SCRIVE IL FUTURO.</span>
+            </h2>
+        </section>
+
+        <section class="minimal-contact reveal">
+            <div class="contact-grid">
+                <div class="contact-info">
+                    <span class="serial-number">ACCESS NODE</span>
+                    <p>Vuoi essere parte della telemetria?</p>
+                </div>
+                <a href="/contact" class="btn-minimal">
+                    <span>OPEN COMMUNICATION</span>
+                    <i class="fas fa-chevron-right"></i>
+                </a>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="main-footer">
+        <div class="container">
+            <p style="font-family:'Syncopate'; font-size:0.6rem; opacity:0.3; text-align:center; padding-bottom: 60px; letter-spacing: 3px;">
+                © 2026 MATTIA VOLPI #77 // DATA POWERED PERFORMANCE
+            </p>
+        </div>
+    </footer>
+
+</body>
+</html>

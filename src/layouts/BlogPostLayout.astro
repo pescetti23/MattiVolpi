@@ -1,0 +1,118 @@
+---
+import Navbar from '../components/Navbar.astro';
+const { frontmatter } = Astro.props;
+---
+
+<html lang="it">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{frontmatter.title} // MATTIA VOLPI #77</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Syncopate:wght@700&family=Inter:wght@300;400;700&display=swap" rel="stylesheet">
+    
+    <style is:global>
+        :root { --blue: #00b4ff; --black: #050505; }
+        
+        body { 
+            margin: 0; background: var(--black); color: white; 
+            font-family: 'Inter', sans-serif; line-height: 1.6;
+        }
+
+        .post-container { max-width: 800px; margin: 0 auto; padding: 0 20px; }
+
+        /* --- HERO ARTICOLO --- */
+        .post-hero { 
+            padding: 180px 0 60px; text-align: left; 
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+        .post-category { font-family: 'Syncopate'; color: var(--blue); font-size: 0.6rem; letter-spacing: 5px; }
+        .post-title { font-family: 'Syncopate'; font-size: clamp(2rem, 5vw, 3.5rem); font-style: italic; margin: 20px 0; text-transform: uppercase; line-height: 1.1; }
+        .post-meta { font-family: 'Syncopate'; font-size: 0.55rem; opacity: 0.4; letter-spacing: 2px; }
+
+        /* --- IMMAGINE --- */
+        .main-img { 
+            width: 100%; height: 450px; object-fit: cover; 
+            margin: 60px 0; border: 1px solid rgba(255,255,255,0.1);
+            filter: grayscale(0.5); transition: 0.5s;
+        }
+        .main-img:hover { filter: grayscale(0); border-color: var(--blue); }
+
+        /* --- CONTENUTO --- */
+        .content { font-size: 1.1rem; color: rgba(255,255,255,0.8); font-weight: 300; margin-bottom: 80px; }
+        .content h2, .content h3 { font-family: 'Syncopate'; color: white; text-transform: uppercase; font-style: italic; margin-top: 50px; }
+        .content strong { color: var(--blue); font-weight: 700; }
+        
+        /* --- TASTO BACK IN BASSO CON OVER BLU --- */
+        .back-container {
+            padding: 40px 0;
+            border-top: 1px solid rgba(255,255,255,0.05);
+            display: flex;
+            justify-content: flex-start;
+        }
+
+        .back-link {
+            display: inline-flex; 
+            align-items: center; 
+            gap: 12px;
+            padding: 12px 24px;
+            color: var(--blue); 
+            text-decoration: none;
+            font-family: 'Syncopate'; 
+            font-size: 0.6rem; 
+            letter-spacing: 2px;
+            border: 1px solid var(--blue);
+            transition: 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+            background: transparent;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        /* Effetto al passaggio del mouse (Hover) */
+        .back-link:hover { 
+            background: var(--blue); /* Diventa blu pieno */
+            color: var(--black); /* Testo nero per contrasto */
+            box-shadow: 0 0 20px rgba(0, 180, 255, 0.4); /* Glow esterno */
+            transform: translateX(-5px);
+        }
+
+        /* Effetto alla pressione (Click) */
+        .back-link:active {
+            transform: scale(0.95) translateX(-5px);
+            background: #0086c2; /* Un blu leggermente più scuro al click */
+        }
+
+        .footer-spacer { padding: 60px 0 100px; text-align: center; }
+    </style>
+</head>
+<body>
+    <Navbar />
+
+    <article class="post-container">
+        <header class="post-hero">
+            <span class="post-category">{frontmatter.category}</span>
+            <h1 class="post-title">{frontmatter.title}</h1>
+            <div class="post-meta">DATE: {frontmatter.date} // STATUS: PUBLISHED</div>
+        </header>
+
+        {frontmatter.image && <img src={frontmatter.image} class="main-img" alt={frontmatter.title} />}
+
+        <div class="content">
+            <slot /> 
+        </div>
+
+        <div class="back-container">
+            <a href="/journal" class="back-link">
+                <i class="fas fa-arrow-left"></i> 
+                <span>BACK TO JOURNAL</span>
+            </a>
+        </div>
+
+        <footer class="footer-spacer">
+            <p style="font-family:'Syncopate'; font-size:0.5rem; opacity:0.3; letter-spacing: 3px;">
+                © 2026 MATTIA VOLPI #77 // END OF DATA LOG
+            </p>
+        </footer>
+    </article>
+</body>
+</html>

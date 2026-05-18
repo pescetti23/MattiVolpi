@@ -1,0 +1,65 @@
+---
+// src/components/Navbar.astro
+---
+<nav class="main-nav">
+    <div class="nav-container">
+        <a href="/" class="logo">MV<span class="blue-text">77</span></a>
+        
+        <div class="nav-links" id="navLinks">
+            <a href="/carriera">History</a>
+            <a href="/journal">Journal</a>
+            <a href="/media">Media</a>
+            <a href="/contact">Contact</a>
+        </div>
+
+        <button class="menu-btn" id="menuBtn">
+            <span></span><span></span><span></span>
+        </button>
+    </div>
+</nav>
+
+<style>
+    .main-nav {
+        position: fixed; top: 0; left: 0; width: 100%;
+        background: rgba(5, 5, 5, 0.95);
+        backdrop-filter: blur(15px);
+        z-index: 9999;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    }
+    .nav-container {
+        max-width: 1300px; margin: 0 auto; padding: 15px 30px;
+        display: flex; justify-content: space-between; align-items: center;
+    }
+    .logo {
+        font-family: 'Syncopate', sans-serif; font-weight: 700; color: white;
+        text-decoration: none; font-size: 1.3rem; letter-spacing: -1px;
+    }
+    .blue-text { color: #00b4ff; }
+    .nav-links { display: flex; gap: 30px; }
+    .nav-links a {
+        color: rgba(255, 255, 255, 0.7); text-decoration: none;
+        text-transform: uppercase; font-size: 0.75rem; font-weight: 700;
+        letter-spacing: 2px; transition: 0.3s;
+    }
+    .nav-links a:hover { color: #00b4ff; }
+
+    .menu-btn { display: none; flex-direction: column; gap: 5px; background: none; border: none; cursor: pointer; }
+    .menu-btn span { width: 25px; height: 2px; background: white; }
+
+    @media (max-width: 768px) {
+        .menu-btn { display: flex; }
+        .nav-links {
+            position: fixed; top: 0; right: -100%; width: 100%; height: 100vh;
+            background: #050505; flex-direction: column; justify-content: center;
+            align-items: center; transition: 0.4s;
+        }
+        .nav-links.active { right: 0; }
+        .nav-links a { font-size: 1.5rem; }
+    }
+</style>
+
+<script>
+    const btn = document.getElementById('menuBtn');
+    const links = document.getElementById('navLinks');
+    btn?.addEventListener('click', () => links?.classList.toggle('active'));
+</script>
