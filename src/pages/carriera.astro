@@ -52,6 +52,7 @@ import Navbar from '../components/Navbar.astro';
             position: relative;
         }
 
+        /* Effetto Hover classico mantenuto per PC */
         .event:hover .event-date { 
             color: rgba(0, 180, 255, 0.1);
             -webkit-text-stroke: 1px var(--blue);
@@ -93,7 +94,6 @@ import Navbar from '../components/Navbar.astro';
         }
         .contact-grid:hover { border-color: var(--blue); background: rgba(0, 180, 255, 0.05); }
 
-        /* FIX GRAFICA TASTO CONTACT */
         .btn-minimal {
             display: inline-flex;
             align-items: center;
@@ -118,16 +118,65 @@ import Navbar from '../components/Navbar.astro';
             transform: translateY(-2px);
         }
 
-        .btn-minimal:active {
-            transform: scale(0.96);
-        }
+        .btn-minimal:active { transform: scale(0.96); }
 
+        /* ==========================================================================
+           REVISIONE MOBILE (Ottimizzazione della Timeline ed Effetto Neon Automatico)
+           ========================================================================== */
         @media (max-width: 768px) {
-            .timeline::before { left: 20px; }
-            .event, .event:nth-child(even) { flex-direction: column; align-items: flex-start; margin-bottom: 80px; }
-            .event-date { width: 100%; font-size: 3.5rem; margin-left: 40px; color: var(--blue); opacity: 0.3; }
-            .event-content { width: calc(100% - 40px); margin-left: 40px; padding: 30px; }
-            .contact-grid { flex-direction: column; gap: 30px; text-align: center; }
+            .page-header { padding: 140px 0 60px; }
+            
+            .timeline::before { left: 8px; }
+            
+            .event, .event:nth-child(even) { 
+                flex-direction: column; 
+                align-items: flex-start; 
+                margin-bottom: 60px; 
+            }
+            
+            /* Stato iniziale della data su mobile (trasparente con contorno azzurro opaco) */
+            .event-date { 
+                width: auto;
+                font-size: 1.8rem; 
+                margin-left: 30px; 
+                margin-bottom: 12px;
+                color: transparent;
+                -webkit-text-stroke: 1px rgba(0, 180, 255, 0.4);
+                opacity: 1;
+                font-weight: 900;
+                letter-spacing: -1px;
+                transform: none;
+                transition: all 0.4s ease;
+            }
+            
+            /* NUOVA CLASSE: Questa si attiva AUTOMATICAMENTE via JS quando l'elemento è a schermo */
+            .event.is-focused .event-date {
+                color: rgba(0, 180, 255, 0.1);
+                -webkit-text-stroke: 1px var(--blue);
+                text-shadow: 0 0 15px rgba(0, 180, 255, 0.6);
+                transform: skewX(-5deg) scale(1.03);
+            }
+            
+            .event-content { 
+                width: calc(100% - 30px); 
+                margin-left: 30px; 
+                padding: 25px; 
+                box-sizing: border-box;
+                transition: border-color 0.4s ease;
+            }
+
+            /* Anche il bordo della card si illumina leggermente in sincrono */
+            .event.is-focused .event-content {
+                border-color: rgba(0, 180, 255, 0.4);
+            }
+            
+            .event-content h3 { font-size: 1.1rem; margin-bottom: 15px; }
+            .event-content p { font-size: 0.88rem; line-height: 1.6; }
+            .status-tag { margin-bottom: 15px; }
+
+            .vision-closure { padding: 60px 0 30px; }
+            .contact-grid { flex-direction: column; gap: 25px; text-align: center; padding: 30px 20px; }
+            .btn-minimal { width: 100%; justify-content: center; box-sizing: border-box; }
         }
     </style>
 </head>
@@ -136,7 +185,7 @@ import Navbar from '../components/Navbar.astro';
     <Navbar />
 
     <header class="page-header container">
-        <div class="reveal">
+        <div>
             <span class="serial-number">LOG FILE: PILOT EVOLUTION v2.6</span>
             <h1>FULL CAREER<br><span style="color:var(--blue)">SUMMARY</span></h1>
         </div>
@@ -145,7 +194,7 @@ import Navbar from '../components/Navbar.astro';
     <main class="container">
         <div class="timeline">
             
-            <div class="event reveal">
+            <div class="event">
                 <div class="event-date">2014 - 2016</div>
                 <div class="event-content">
                     <span class="status-tag">SYSTEM START</span>
@@ -154,7 +203,7 @@ import Navbar from '../components/Navbar.astro';
                 </div>
             </div>
 
-            <div class="event reveal">
+            <div class="event">
                 <div class="event-date">2018 - 2020</div>
                 <div class="event-content">
                     <span class="status-tag">INT UPGRADE</span>
@@ -163,7 +212,7 @@ import Navbar from '../components/Navbar.astro';
                 </div>
             </div>
 
-            <div class="event reveal">
+            <div class="event">
                 <div class="event-date">2021 - 2024</div>
                 <div class="event-content">
                     <span class="status-tag">EURO MOTO2</span>
@@ -172,7 +221,7 @@ import Navbar from '../components/Navbar.astro';
                 </div>
             </div>
 
-            <div class="event reveal">
+            <div class="event">
                 <div class="event-date">2025</div>
                 <div class="event-content">
                     <span class="status-tag">SBK DEBUT</span>
@@ -181,7 +230,7 @@ import Navbar from '../components/Navbar.astro';
                 </div>
             </div>
 
-            <div class="event reveal">
+            <div class="event">
                 <div class="event-date">2026</div>
                 <div class="event-content" style="border-color: var(--blue); background: rgba(0, 180, 255, 0.08);">
                     <span class="status-tag" style="background: var(--blue); color: black;">ACTIVE MISSION</span>
@@ -191,7 +240,7 @@ import Navbar from '../components/Navbar.astro';
             </div>
         </div>
 
-        <section class="vision-closure reveal">
+        <section class="vision-closure">
             <div class="vision-line"></div>
             <h2 class="vision-text">
                 I DATI RACCONTANO IL PASSATO.<br>
@@ -199,7 +248,7 @@ import Navbar from '../components/Navbar.astro';
             </h2>
         </section>
 
-        <section class="minimal-contact reveal">
+        <section class="minimal-contact">
             <div class="contact-grid">
                 <div class="contact-info">
                     <span class="serial-number">ACCESS NODE</span>
@@ -222,5 +271,30 @@ import Navbar from '../components/Navbar.astro';
         </div>
     </footer>
 
+    <script>
+        const events = document.querySelectorAll('.event');
+        
+        // Configuriamo l'observer: si attiva quando il blocco è circa a metà dello schermo
+        const observerOptions = {
+            root: null,
+            rootMargin: '-25% 0px -25% 0px', 
+            threshold: 0.2
+        };
+
+        const eventObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('is-focused');
+                } else {
+                    entry.target.classList.remove('is-focused');
+                }
+            });
+        }, observerOptions);
+
+        // Attiviamo il controllo solo se siamo su un display mobile/tablet
+        if (window.innerWidth <= 768) {
+            events.forEach(event => eventObserver.observe(event));
+        }
+    </script>
 </body>
 </html>

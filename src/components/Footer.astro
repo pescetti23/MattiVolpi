@@ -27,7 +27,7 @@
         </div>
     </div>
 </footer>
-PORCODDIO FUNZIONI?????????????
+
 <style>
     .racing-footer {
         background: #000;
@@ -38,7 +38,6 @@ PORCODDIO FUNZIONI?????????????
         color: white;
     }
 
-    /* Usiamo un nome specifico per evitare conflitti */
     .footer-container {
         max-width: 1200px;
         margin: 0 auto;
@@ -103,15 +102,44 @@ PORCODDIO FUNZIONI?????????????
         margin: 0;
     }
 
-    /* Mobile: tutto in colonna e centrato */
+    /* ==========================================================================
+       TELEMETRIA MOBILE (Sotto i 768px di larghezza schermo)
+       ========================================================================== */
     @media (max-width: 768px) {
+        .racing-footer {
+            padding: 40px 0 20px 0; /* Ridotto il padding verticale per non creare vuoti giganti */
+            margin-top: 40px;       /* Meno distacco dal contenuto sui telefoni */
+        }
+
+        .footer-container {
+            padding: 0 20px;        /* Margini interni laterali più stretti per sfruttare lo schermo */
+        }
+
         .footer-main {
             flex-direction: column;
-            gap: 30px;
+            gap: 25px;              /* Gestione millimetrica dello spazio verticale tra brand e icone */
             text-align: center;
+            padding-bottom: 30px;
         }
+
+        .footer-brand p {
+            font-size: 0.7rem;      /* Ridotto un filo il testo descrittivo per farlo stare su una riga sola */
+            max-width: 280px;       /* Evita che il testo si spalmi troppo vicino ai bordi */
+            margin: 8px auto 0 auto; /* Centra il blocco di testo nel layout a colonna */
+        }
+
         .social-links {
             justify-content: center;
+            gap: 25px;              /* Distanziate leggermente di più le icone per facilitare il "tap" con il dito */
+        }
+        
+        .footer-bottom {
+            padding-top: 20px;
+        }
+        
+        .footer-bottom p {
+            font-size: 0.45rem;     /* Riduzione di sicurezza per evitare che la riga del copyright vada a capo rompendo il design */
+            line-height: 1.4;
         }
     }
 </style>

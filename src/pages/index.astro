@@ -55,12 +55,12 @@ const posts = Object.values(allPosts)
         /* --- HERO --- */
         .hero {
             height: 100vh; display: flex; justify-content: center; align-items: center;
-            background: linear-gradient(to bottom, rgba(0,0,0,0.6), var(--black)), url('/sfondo.jpg') center/cover no-repeat;
+            background: linear-gradient(to bottom, rgba(0,0,0,0.4), var(--black)), url('/sfondo.jpg') center/cover no-repeat;
             text-align: center; overflow: hidden; position: relative;
         }
-        .hero-content { position: relative; z-index: 2; transform: skewX(-5deg); }
+        .hero-content { position: relative; z-index: 2; transform: skewX(-5deg); padding: 0 20px; }
         .tagline { font-family: 'Syncopate'; color: var(--blue); font-size: 0.7rem; letter-spacing: 12px; margin-bottom: 20px; display: block; text-transform: uppercase; animation: pulse 2s infinite; }
-        h1 { font-size: clamp(3.5rem, 12vw, 9rem); font-weight: 900; font-style: italic; text-transform: uppercase; margin: 0; line-height: 0.85; letter-spacing: -4px; text-shadow: 10px 10px 0px rgba(0,180,255,0.1); }
+        h1 { font-size: clamp(3rem, 10vw, 9rem); font-weight: 900; font-style: italic; text-transform: uppercase; margin: 0; line-height: 0.85; letter-spacing: -4px; text-shadow: 10px 10px 0px rgba(0,180,255,0.1); }
         
         @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
 
@@ -79,8 +79,8 @@ const posts = Object.values(allPosts)
         .stat-header { font-size: 0.5rem; font-family: 'Syncopate'; letter-spacing: 2px; margin-bottom: 15px; display: flex; align-items: center; gap: 8px; opacity: 0.6; }
         .dot { width: 6px; height: 6px; background: var(--blue); border-radius: 50%; animation: blink 1s infinite; }
         @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
-        .counter { font-family: 'Syncopate'; font-size: 3rem; margin: 0; font-weight: 700; font-style: italic; }
-        .unit { color: var(--blue); font-size: 0.8rem; font-weight: 900; }
+        .counter { font-family: 'Syncopate'; font-size: 3rem; margin: 0; font-weight: 700; font-style: italic; display: inline-block; }
+        .unit { color: var(--blue); font-size: 0.8rem; font-weight: 900; margin-left: 5px; }
         .stat-bar { width: 100%; height: 4px; background: rgba(255,255,255,0.05); margin: 15px 0; overflow: hidden; }
         .bar-fill { height: 100%; background: linear-gradient(90deg, var(--blue), #fff); transform: translateX(-100%); transition: 2s cubic-bezier(0.23, 1, 0.32, 1); }
 
@@ -156,10 +156,72 @@ const posts = Object.values(allPosts)
         .social-icons a:hover { color: var(--blue); opacity: 1; transform: translateY(-5px); }
         .footer-bottom { text-align: center; border-top: 1px solid #111; padding-top: 40px; font-family: 'Syncopate'; font-size: 0.5rem; letter-spacing: 4px; opacity: 0.3; }
 
+        /* ==========================================================================
+           RESPONSIVE REVISIONS (Configurazione di Partenza a Sinistra su Mobile)
+           ========================================================================== */
         @media (max-width: 900px) {
-            .bio-grid { grid-template-columns: 1fr; }
-            h1 { font-size: 4rem; }
+            .hero h1 { font-size: 4rem; letter-spacing: -2px; }
+            .bio-grid { grid-template-columns: 1fr; gap: 40px; }
+            .bio-image { height: 350px; }
             .footer-flex { flex-direction: column; text-align: center; }
+        }
+
+        @media (max-width: 600px) {
+            /* Foto più corta (65% del display) senza alcun bordo */
+            .hero { 
+                height: 65vh; 
+                background-size: cover !important;
+                /* MODIFICA: La foto adesso parte dal 30% orizzontale (spostata a sinistra) */
+                background-position: 30% center; 
+                display: flex;
+                justify-content: center;
+                align-items: center;
+            }
+            .tagline { font-size: 0.55rem; letter-spacing: 6px; margin-bottom: 12px; }
+            .hero h1 { font-size: 2.8rem; letter-spacing: -1px; text-shadow: 4px 4px 0px rgba(0,180,255,0.1); }
+            
+            /* Telemetry Grid */
+            .telemetry-bar { padding: 40px 0; }
+            .telemetry-grid { grid-template-columns: repeat(2, 1fr); gap: 15px; }
+            .stat-box { padding: 15px; }
+            .counter { font-size: 1.8rem; }
+            .unit { font-size: 0.6rem; }
+            
+            /* Bio Elements */
+            .bio-section { padding: 50px 0; text-align: center; }
+            .bio-image { height: 260px; max-width: 100%; margin: 0 auto; transform: skewX(-2deg); }
+            .bio-content h2 { font-size: 1.6rem; margin-top: 25px; margin-bottom: 15px; transform: none; }
+            .bio-content p { font-size: 0.95rem; line-height: 1.6; padding: 0 10px; margin-bottom: 25px; }
+            
+            .bio-content { display: flex; flex-direction: column; align-items: center; }
+            .btn-racing { 
+                display: inline-block; 
+                width: auto; 
+                max-width: 250px; 
+                margin: 0 auto; 
+                padding: 14px 30px; 
+                font-size: 0.65rem; 
+                box-sizing: border-box; 
+            }
+
+            /* Technical Configuration Layout */
+            .tech-section { padding: 50px 0; text-align: center; }
+            .tech-section .section-title { font-size: 1.6rem; margin-bottom: 25px; line-height: 1.2; }
+            .specs-grid { grid-template-columns: 1fr; gap: 12px; }
+            .spec-item { padding: 20px; clip-path: none; }
+            .spec-label { justify-content: center; }
+            
+            /* Journal Reports Card */
+            .journal-section { padding: 50px 0; text-align: center; }
+            .journal-section .section-title { font-size: 1.6rem; margin-bottom: 25px; line-height: 1.2; }
+            .journal-grid { grid-template-columns: 1fr; gap: 20px; }
+            .card { padding: 25px; text-align: left; } 
+            .card h3 { font-size: 1.2rem; }
+            .btn-journal-all { width: 100%; text-align: center; box-sizing: border-box; justify-content: center; }
+
+            /* Main Footer adjustments */
+            .main-footer { margin-top: 50px; padding: 50px 0 25px; }
+            .footer-bottom p { font-size: 0.45rem; line-height: 1.5; }
         }
     </style>
 </head>
@@ -220,7 +282,7 @@ const posts = Object.values(allPosts)
             <div class="bio-content">
                 <span style="color: var(--blue); font-weight: 900; letter-spacing: 5px; font-size: 0.7rem;">THE PROFILE</span>
                 <h2>MATTIA VOLPI:<br>CHASING LIMITS</h2>
-                <p>Nato per la velocità. Mattia Volpi #77 fonde istinto e precisione tecnica in ogni curva. Dalla telemetria alla pista, la ricerca della perfezione non si ferma mai.</p>
+                <p>Nato per la velocità. Mattia Volpi #77 fonde istinto e precisione tecnica in ogni curva. Dalla telemetria alla pista, la ricerca della perfezione truths non si ferma mai.</p>
                 <a href="/carriera" class="btn-racing">FULL HISTORY</a>
             </div>
         </div>
@@ -264,7 +326,7 @@ const posts = Object.values(allPosts)
                 <div class="social-icons">
                     <a href="https://www.instagram.com" target="_blank"><i class="fab fa-instagram"></i></a>
                     <a href="https://www.tiktok.com" target="_blank"><i class="fab fa-tiktok"></i></a>
-                    <a href="https://www.youtube.com" target="_blank"><i class="fab fa-youtube"></i></a>
+                    <a href="https://www.youtube.com" target="_blank"><i class="fab fa-youtube ="></i></a>
                 </div>
             </div>
             <div class="footer-bottom">
@@ -289,7 +351,8 @@ const posts = Object.values(allPosts)
                     } else { counter.innerText = target; }
                 };
                 update();
-                if(bars[i]) bars[i].style.transform = 'translateX(0)';
+                const element = bars[i] as HTMLElement;
+                if(element) element.style.transform = 'translateX(0)';
             });
         };
 
@@ -302,8 +365,20 @@ const posts = Object.values(allPosts)
 
         window.addEventListener('scroll', () => {
             const scroll = window.pageYOffset;
-            const hero = document.querySelector('.hero');
-            if (hero) hero.style.backgroundSize = `${100 + scroll / 10}%`;
+            const hero = document.querySelector('.hero') as HTMLElement;
+            if (hero) {
+                const isMobile = window.innerWidth <= 600;
+                if (isMobile) {
+                    // EFFETTO SFRECCIA REATTIVO SU MOBILE: 
+                    // MODIFICA: La foto parte dal 30% (allineata a sinistra)
+                    const shiftX = 30 + (scroll * 0.08); 
+                    hero.style.backgroundPosition = `${shiftX}% center`;
+                } else {
+                    // Mantiene lo zoom classico reattivo da PC
+                    hero.style.backgroundPosition = 'center center';
+                    hero.style.backgroundSize = `${100 + scroll / 10}% auto`;
+                }
+            }
         });
     </script>
 </body>
