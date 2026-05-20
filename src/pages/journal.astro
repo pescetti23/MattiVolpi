@@ -1,5 +1,18 @@
 ---
 import Navbar from '../components/Navbar.astro';
+
+// 1. Carichiamo i file dal percorso corretto (assicurati che i file siano in src/pages/blog/)
+const allPosts = await import.meta.glob('./blog/*.md', { eager: true });
+const posts = Object.values(allPosts);
+
+// 2. Mappiamo i post per assicurarci di passare solo i dati validi
+const sortedPosts = posts.map(post => ({
+    url: post.url,
+    title: post.frontmatter.title || "Senza Titolo",
+    date: post.frontmatter.date || "Data non definita",
+    category: post.frontmatter.category || "NEWS",
+    description: post.frontmatter.description || "Nessuna descrizione disponibile."
+}));
 ---
 
 <html lang="it">
@@ -25,20 +38,11 @@ import Navbar from '../components/Navbar.astro';
         }
         
         .container { max-width: 1100px; margin: 0 auto; padding: 0 20px; }
-
         .journal-header { padding: 200px 0 60px; text-align: left; border-bottom: 1px solid rgba(0, 180, 255, 0.1); }
         .tag { font-family: 'Syncopate'; color: var(--blue); font-size: 0.6rem; letter-spacing: 5px; text-transform: uppercase; }
         h1 { font-family: 'Syncopate'; font-size: clamp(2.5rem, 8vw, 4.5rem); font-style: italic; margin: 15px 0; text-transform: uppercase; letter-spacing: -1px; }
+        .journal-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 40px; padding: 60px 0 120px; }
 
-        /* --- JOURNAL GRID --- */
-        .journal-grid { 
-            display: grid; 
-            grid-template-columns: repeat(2, 1fr); 
-            gap: 40px; 
-            padding: 60px 0 120px;
-        }
-
-        /* CARD IN STILE LOG DI SISTEMA */
         .log-card {
             background: rgba(13, 13, 13, 0.7);
             border: 1px solid rgba(0, 180, 255, 0.1);
@@ -53,12 +57,10 @@ import Navbar from '../components/Navbar.astro';
             color: white;
         }
 
-        /* Angolino tecnico distintivo */
         .log-card::after {
             content: ''; position: absolute; top: 0; right: 0; width: 20px; height: 20px;
             border-top: 2px solid var(--blue); border-right: 2px solid var(--blue);
-            opacity: 0.3;
-            transition: 0.4s ease;
+            opacity: 0.3; transition: 0.4s ease;
         }
 
         .log-card:hover {
@@ -68,78 +70,19 @@ import Navbar from '../components/Navbar.astro';
             transform: translateY(-4px);
         }
 
-        .log-card:hover::after {
-            opacity: 1;
-            width: 30px; height: 30px;
-        }
+        .log-card:hover::after { opacity: 1; width: 30px; height: 30px; }
 
-        .log-meta {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 25px;
-        }
-
-        .log-id {
-            font-family: 'Syncopate';
-            font-size: 0.6rem;
-            color: var(--blue);
-            letter-spacing: 2px;
-        }
-
-        .log-date {
-            font-size: 0.85rem;
-            opacity: 0.4;
-            font-weight: 300;
-        }
-
-        .log-card h2 {
-            font-family: 'Syncopate';
-            font-size: 1.25rem;
-            line-height: 1.4;
-            margin: 0 0 15px 0;
-            text-transform: uppercase;
-            transition: 0.3s;
-        }
-
-        .log-card:hover h2 {
-            color: var(--blue);
-        }
-
-        .log-card p {
-            font-size: 0.95rem;
-            opacity: 0.6;
-            line-height: 1.7;
-            font-weight: 300;
-            margin: 0 0 30px 0;
-            flex-grow: 1;
-        }
-
-        .log-link {
-            font-family: 'Syncopate';
-            font-size: 0.65rem;
-            letter-spacing: 2px;
-            display: inline-flex;
-            align-items: center;
-            gap: 10px;
-            color: var(--blue);
-            text-transform: uppercase;
-        }
-
-        .log-link i {
-            font-size: 0.7rem;
-            transition: 0.3s;
-        }
-
-        .log-card:hover .log-link i {
-            transform: translateX(4px);
-        }
-
-        /* --- RESPONSIVE --- */
+        .log-meta { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; }
+        .log-id { font-family: 'Syncopate'; font-size: 0.6rem; color: var(--blue); letter-spacing: 2px; }
+        .log-date { font-size: 0.85rem; opacity: 0.4; font-weight: 300; }
+        .log-card h2 { font-family: 'Syncopate'; font-size: 1.25rem; line-height: 1.4; margin: 0 0 15px 0; text-transform: uppercase; transition: 0.3s; }
+        .log-card:hover h2 { color: var(--blue); }
+        .log-card p { font-size: 0.95rem; opacity: 0.6; line-height: 1.7; font-weight: 300; margin: 0 0 30px 0; flex-grow: 1; }
+        .log-link { font-family: 'Syncopate'; font-size: 0.65rem; letter-spacing: 2px; display: inline-flex; align-items: center; gap: 10px; color: var(--blue); text-transform: uppercase; }
+        
         @media (max-width: 850px) {
             .journal-grid { grid-template-columns: 1fr; gap: 30px; padding-bottom: 80px; }
             .journal-header { padding-top: 140px; padding-bottom: 40px; }
-            .log-card { padding: 30px; }
         }
     </style>
 </head>
@@ -154,55 +97,19 @@ import Navbar from '../components/Navbar.astro';
         </header>
 
         <main class="journal-grid">
-            
-            <a href="#" class="log-card">
-                <div>
-                    <div class="log-meta">
-                        <span class="log-id">LOG // CIV SBK</span>
-                        <span class="log-date">20.05.2026</span>
+            {sortedPosts.map((post) => (
+                <a href={post.url} class="log-card">
+                    <div>
+                        <div class="log-meta">
+                            <span class="log-id">LOG // {post.category}</span>
+                            <span class="log-date">{post.date}</span>
+                        </div>
+                        <h2>{post.title}</h2>
+                        <p>{post.description}</p>
                     </div>
-                    <h2>PRIMI TEST UFFICIALI CON BMW M1000RR</h2>
-                    <p>I dati raccolti a Misano aprono ottime prospettive. Il feeling con la nuova sella e l'erogazione elettronica del motore BMW promettono un passo gara impressionante.</p>
-                </div>
-                <span class="log-link">READ DATA PAYLOAD <i class="fas fa-chevron-right"></i></span>
-            </a>
-
-            <a href="#" class="log-card">
-                <div>
-                    <div class="log-meta">
-                        <span class="log-id">LOG // BEHIND THE SCENES</span>
-                        <span class="log-date">12.04.2026</span>
-                    </div>
-                    <h2>PREPARAZIONE ATLETICA: FOCUS TELEMETRIA CARDIO</h2>
-                    <p>Come l'analisi dei battiti cardiaci e dei tempi di reazione ridefinisce gli allenamenti invernali in sella al motard. Ogni millisecondo guadagnato conta.</p>
-                </div>
-                <span class="log-link">READ DATA PAYLOAD <i class="fas fa-chevron-right"></i></span>
-            </a>
-
-            <a href="#" class="log-card">
-                <div>
-                    <div class="log-meta">
-                        <span class="log-id">LOG // PARTNERSHIP</span>
-                        <span class="log-date">03.03.2026</span>
-                    </div>
-                    <h2>FIRMATO L'ACCORDO CON IL TEAM PISTARD</h2>
-                    <p>Ufficializzata l'unione strategica per la stagione 2026 nel CIV Superbike. Una sinergia nata per puntare direttamente ai piani alti della classifica generale.</p>
-                </div>
-                <span class="log-link">READ DATA PAYLOAD <i class="fas fa-chevron-right"></i></span>
-            </a>
-
-            <a href="#" class="log-card">
-                <div>
-                    <div class="log-meta">
-                        <span class="log-id">LOG // MEMORIES</span>
-                        <span class="log-date">15.11.2025</span>
-                    </div>
-                    <h2>IL PASSAGGIO DALL'EUROPEO MOTO2 ALLA 1000CC</h2>
-                    <p>Un bilancio tecnico sul cambio di stile di guida richiesto dalle cilindrate stradali rispetto ai prototipi rigidi della categoria Moto2. Gestione dei pesi e della trazione.</p>
-                </div>
-                <span class="log-link">READ DATA PAYLOAD <i class="fas fa-chevron-right"></i></span>
-            </a>
-
+                    <span class="log-link">READ DATA PAYLOAD <i class="fas fa-chevron-right"></i></span>
+                </a>
+            ))}
         </main>
     </div>
 
@@ -211,6 +118,5 @@ import Navbar from '../components/Navbar.astro';
             © 2026 MATTIA VOLPI #77 // DATA LOG TERMINAL
         </p>
     </footer>
-
 </body>
 </html>
