@@ -2,7 +2,7 @@
 layout: ../../layouts/BlogPostLayout.astro
 title: "MISANO 2026"
 date: "26 APR 2026"
-category: "RACE sREPORT"
+category: "RACE REPORT"
 description: "Week end da ricordare"
 image: "/sfondo.jpg"
 ---

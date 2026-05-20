@@ -60,24 +60,33 @@ import Navbar from '../components/Navbar.astro';
             background: rgba(0, 180, 255, 0.05);
         }
 
+        /* FIX TASTO FINALE */
         .btn-send {
             background: transparent;
             border: 1px solid var(--blue);
-            color: white;
-            padding: 20px;
+            color: var(--blue); /* Testo blu inizialmente */
+            padding: 22px;
             font-family: 'Syncopate';
             font-size: 0.7rem;
+            font-weight: 700;
             letter-spacing: 4px;
             cursor: pointer;
-            transition: 0.4s;
+            transition: 0.4s cubic-bezier(0.23, 1, 0.32, 1);
             text-transform: uppercase;
+            width: 100%;
+            margin-top: 10px;
+            outline: none;
         }
 
         .btn-send:hover {
             background: var(--blue);
-            color: black;
-            font-weight: 900;
-            box-shadow: 0 0 20px rgba(0, 180, 255, 0.4);
+            color: var(--black); /* Testo nero su sfondo blu */
+            box-shadow: 0 0 25px rgba(0, 180, 255, 0.5);
+            transform: translateY(-2px);
+        }
+
+        .btn-send:active {
+            transform: scale(0.98);
         }
 
         @media (max-width: 850px) {
@@ -102,7 +111,6 @@ import Navbar from '../components/Navbar.astro';
                     <div class="info-section">
                         <h3>MANAGEMENT</h3>
                         <p>info@mattiavolpi.it</p>
-                        
                     </div>
 
                     <div class="info-section">
@@ -123,25 +131,25 @@ import Navbar from '../components/Navbar.astro';
             </aside>
 
             <section>
-                <form class="contact-form">
+                <form class="contact-form" method="POST">
                     <div class="form-group">
                         <label>FULL NAME</label>
-                        <input type="text" placeholder="Your name" required />
+                        <input type="text" name="name" placeholder="Your name" required />
                     </div>
                     
                     <div class="form-group">
                         <label>EMAIL ADDRESS</label>
-                        <input type="email" placeholder="email@example.com" required />
+                        <input type="email" name="email" placeholder="email@example.com" required />
                     </div>
 
                     <div class="form-group">
                         <label>SUBJECT</label>
-                        <input type="text" placeholder="Sponsorship / Press / Fan" />
+                        <input type="text" name="subject" placeholder="Sponsorship / Press / Fan" />
                     </div>
 
                     <div class="form-group">
                         <label>MESSAGE</label>
-                        <textarea rows="6" placeholder="Write your message here..."></textarea>
+                        <textarea name="message" rows="6" placeholder="Write your message here..." required></textarea>
                     </div>
 
                     <button type="submit" class="btn-send">SEND MESSAGE</button>
